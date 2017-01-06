@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$('document').ready(function () {
+$("#login").click(function(){
+	var first_name=$("#first_name").val();
+	$.ajax({
+        url: "film/login",
+        type: "GET",
+        dataType: "text",
+        data:  {first_name},
+        success: function (str) {
+        	if(str=="false"){
+        		alert("用户名不存在！");
+        		$("#first_name").val("");
+        	}else{
+        		window.location.href=str;
+        	}
+        }
+        })
+})
+})
+</script>
+</head>
+<body>
+<div style="width: 450px;height: 200px;margin-left: 450px;margin-top: 50px; background-color: #eee;">
+<div align="center" style="margin-top:30px; text-align: center;">
+<br>
+<h2>欢迎来到电影租赁系统！</h2>
+<label for="first_name">用户名：</label>
+<input type="text" id="first_name" name="first_name" >
+<br>
+<br/>
+<button id="login" class="btn btn-info">登录</button>
+</div>
+</div>
+</body>
+
+</html>

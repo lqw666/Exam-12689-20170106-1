@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet"
+	href="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+<script
+	src="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	$('document').ready(
+			function() {
+				$.ajax({
+					url : "film/language",
+					type : "GET",
+					dataType : "json",
+					data : "",
+					success : function(languagedate) {
+						var languagelist = languagedate;
+						if (languagelist != null && languagelist.length > 0) {
+							for (var i = 0; i < languagelist.length; i++) {
+								$(
+										"<option value = '"+languagelist[i].name+"'>"
+												+ languagelist[i].name
+												+ "</option>").appendTo(
+										"#language");
+							}
+						}
+					}
+				})
+			})
+	function addonefilm() {
+		var film = {
+			title : $("#title").val(),
+			description : $("#description").val(),
+			language : $("#language").val(),
+		};
+		$.ajax({
+			url : "film/addfilm",
+			type : "GET",
+			dataType : "json",
+			data : film,
+			success : function(data) {
+				if (data == "false") {
+					alert("更新失败！");
+				} else {
+					window.location.href = data;
+				}
+			}
+		})
+	}
+</script>
+</head>
+<body>
+	<div
+		style="width: 400px; height: 300px; background-color: #eee; margin-left: 450px; margin-top: 50px;">
+		<ul style="list-style: none; letter-spacing: 3px;">
+			<li><br><br>
+			 &nbsp;&nbsp; <label for="title">电影名：</label> <input
+				id="title" type="text" name="title" /></li>
+			<li><br> <br>
+			&nbsp;&nbsp; <label for="description">简
+					&nbsp;&nbsp;介:</label> <input id="description" type="text"
+				name="description" /></li>
+			<li><br><br>
+			&nbsp;&nbsp;&nbsp;<label for="language">语&nbsp;&nbsp;言:<select
+					id="language"></select>&nbsp;&nbsp;
+			<button class="btn btn-info" onclick="addonefilm()">添加</button></label> </li>
+
+		</ul>
+		<br>
+
+
+
+	</div>
+</body>
+</html>

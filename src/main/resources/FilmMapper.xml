@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hand.mapper.FilmMapper">
+<resultMap type="Film" id="film">
+<id column="film_id" property="film_id"/>
+<result column="title" property="title"/>
+<result column="description" property="description"/>
+<association property="language" javaType="Language">
+<result column="language_id" property="language_id"/>
+<result column="name" property="name"/>
+</association>
+</resultMap>
+
+    <select id="selectPage" resultMap="film" parameterType="Page">
+        select film_id,title,description,language.name from film,language where film.language_id = language.language_id
+        
+        <if test="film.title !=null">
+            AND title LIKE CONCAT('%', CONCAT(#{film.title}, '%'))
+        </if>
+        LIMIT #{offset},#{pageSize}
+    
+    </select>
+    <select id="selectCount" resultType="int" parameterType="Page">
+     select count(*) from film where 1 =1
+        <if test="film.title !=null">
+            AND title LIKE CONCAT('%', CONCAT(#{film.title}, '%'))
+        </if>
+    </select>
+    <resultMap id="language" type="Language">
+    <id column="language_id" property="language_id"></id>
+    <result column="name" property="name"></result>
+    </resultMap>
+    <select id="selectLanguage" resultMap="language">
+    select language_id,name from language;
+    </select>
+    <select id="selectFilm" resultType="Film" parameterType="int">
+    select title,description,language.name from film,language where film_id = #{film_id} and 
+    film.language_id = language.language_id;
+    </select>
+    <update id="update" parameterType="Film">
+    update film set title = #{title},description = #{description},language_id = 
+    #{language.language_id} where film_id = #{film_id}
+    </update>
+    <select id="selectLanguageId" resultType="int" parameterType="Film">
+    select language_id from language where name = #{language.name}
+    </select>
+    <delete id="delete" parameterType="int">
+    delete from film where film_id = #{film_id} 
+    </delete>
+    <insert id="insert" parameterType="Film" useGeneratedKeys="true" keyProperty="film_id">
+    insert into film (title,description,language_id) values(#{title},#{description},#{language.language_id})
+    </insert>
+</mapper>

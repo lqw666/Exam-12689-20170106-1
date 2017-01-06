@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    $('document').ready(function () {
+    	var id = location.search;
+    		id=id.substr(4);
+    		$("#film_id").val(id);
+       	 $.ajax({
+                url: "film/language",
+                type: "GET",
+                dataType: "json",
+                data: "",
+                success: function (languagedate) {
+               	 var languagelist=languagedate;
+               	 if(languagelist!=null&&languagelist.length>0){
+               		 for(var i=0;i<languagelist.length;i++){
+               			 $("<option value = '"+languagelist[i].name+"'>"
+               					 +languagelist[i].name+"</option>").appendTo("#language");
+               		 }
+               	 }
+                }
+       	 })
+    	 $.ajax({
+             url: "film/update",
+             type: "GET",
+             dataType: "json",
+             data: {id},
+             success: function (data) {
+            	 var title = data.title;
+            	 $("#title").val(title);
+            	 var description = data.description;
+            	 $("#description").val(description);
+             }
+    	 })
+    	 
+    })
+    
+     function nowupdate(){
+    	var film={
+    			film_id : $("#film_id").val() ,
+    			title : $("#title").val(),
+    			description  : $("#description").val(),
+    			language        :  $("#language").val(),
+    			};
+    	 $.ajax({
+             url: "film/nowupdate",
+             type: "GET",
+             dataType: "json",
+             data: film ,
+             success: function (data) {
+            	 if(data=="false"){
+            		 alert("更新失败！");
+            	 }else{
+            		 window.location.href=data;
+            	 }
+             }
+    	 })
+        }
+    </script>
+</head>
+<body>
+	<input type="hidden" id="film_id" name="film_id"/>
+   电影名：<input id="title" type="text" name="title"/><br/>
+   简介：<input  id="description" type="text" name="description"/><br/>
+   语言:<select id="language">
+   </select>
+   <button onclick="nowupdate()">提交修改</button>
+</body>
+</html>
